@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+specs:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+  template:
+    metadata:
+      labels:
+        app: gitlab
+    spec:
+      containers:
+      - name: gitlab
+        image: gitlab/gitlab-ce:11.8.6-ce.0
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: gitlab-config
+            mountPath: /etc/gitlab
+          - name: gitlab-logs
+            mountPath: /var/log/gitlab
+          - name: gitlab-data
+            mountPath: /var/opt/gitlab
+      volumes:
+        - name: gitlab-config
+          emptyDir: {}
+        - name: gitlab-logs
+          emptyDir: {}
+        - name: gitlab-data
+          emptyDir: {}
+---
